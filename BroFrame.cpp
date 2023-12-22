@@ -3069,6 +3069,8 @@ void CBrowserFrame::OnRestoreWnd()
  * ツール > ファイルマネージャ (SGモードのみ)
  */
 void CBrowserFrame::OpenThinFiler()
+
+
 {
 	if (!theApp.IsSGMode()) return;
 

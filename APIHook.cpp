@@ -77,7 +77,7 @@ public:
 					strRootPath = _T("B:\\");
 				}
 			}
-			m_strRootPath = strRootPath;
+			m_strRootPath = theApp.m_strDataFolderPath;
 			strPath = strRootPath;
 
 			FILEOPENDIALOGOPTIONS option = 0;
@@ -914,12 +914,7 @@ static BOOL WINAPI Hook_GetOpenFileNameW(
 			//UploadTabを使う場合は、B:\\Uploadにする
 			if (theApp.m_AppSettings.IsShowUploadTab())
 			{
-				strRootPath = theApp.m_AppSettings.GetRootPath();
-				if (strRootPath.IsEmpty())
-					strRootPath = _T("B:\\");
-				strRootPath += _T("UpLoad");
-				if (!theApp.IsFolderExists(strRootPath))
-					strRootPath = _T("B:\\");
+				strRootPath = theApp.m_strDataFolderPath;
 			}
 			//UploadTabを使わない場合は、O:\\にする
 			else

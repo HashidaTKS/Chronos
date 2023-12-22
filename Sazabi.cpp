@@ -239,12 +239,21 @@ BOOL CSazabi::InitFunc_Paths()
 		m_strExeFileName = m_strThisAppName;
 	}
 
-	m_strSettingFileFullPath = m_strExeFolderPath;
-	m_strSettingFileFullPath += _T("ChronosDefault.conf");
+	CString strLocalAppPath;
+	strLocalAppPath = SBUtil::GetLocalAppDataPath();
+	if (strLocalAppPath.IsEmpty())
+	{
+		m_strSettingFileFullPath = m_strExeFolderPath;
+	}
+	strLocalAppPath = strLocalAppPath.TrimRight('\\');
+	m_strDataFolderPath = strLocalAppPath + _T("\\ChronosData");
+
+	MakeDirectoryPath(m_strDataFolderPath);
+	m_strSettingFileFullPath = m_strDataFolderPath + _T("\\ChronosDefault.conf");
 
 	// Debug用のLogファイルを準備
-	m_strLogFileFullPath = m_strExeFolderPath;
-	m_strLogFileFullPath += _T("Chronos_trace.log");
+	m_strLogFileFullPath = m_strDataFolderPath;
+	m_strLogFileFullPath += _T("\\Chronos_trace.log");
 
 	m_strDBL_EXE_FullPath = m_strExeFolderPath;
 	m_strDBL_EXE_FullPath += _T("DBLC.EXE");
@@ -280,11 +289,14 @@ BOOL CSazabi::InitFunc_Settings()
 		this->m_AppSettings.LoadDataFromFile(m_strSettingFileFullPath);
 	}
 
+	this->m_AppSettings.SetRootPath(m_strDataFolderPath);
+
 	// ThinApp環境ではChronos.confから設定を追加で読み込む。
 	if (InVirtualEnvironment() == VE_THINAPP)
 	{
 		CString strTS_Path;
 		strTS_Path = GetThinAppEntryPointFolderPath();
+
 		strTS_Path += _T("Chronos.conf");
 		if (PathFileExists(strTS_Path))
 		{
@@ -656,7 +668,7 @@ void CSazabi::InitReadConfSetting()
 	// -------------------------
 	// RedirectFilterScript.conf
 	// -------------------------
-	CString strRedirectFilterScriptFullPath = m_strExeFolderPath;
+	CString strRedirectFilterScriptFullPath = m_strDataFolderPath;
 	strRedirectFilterScriptFullPath += _T("RedirectFilterScriptDefault.conf");
 	//一旦コピーする。
 	if (InVirtualEnvironment() == VE_THINAPP)
@@ -677,7 +689,7 @@ void CSazabi::InitReadConfSetting()
 	// -------------------------
 	// URL_DomainFilter.conf
 	// -------------------------
-	m_strDomainFilterFileFullPath = m_strExeFolderPath;
+	m_strDomainFilterFileFullPath = m_strDataFolderPath;
 	m_strDomainFilterFileFullPath += _T("URL_DomainFilterDefault.conf");
 	//一旦コピーする。
 	if (InVirtualEnvironment() == VE_THINAPP)
@@ -699,7 +711,7 @@ void CSazabi::InitReadConfSetting()
 	// -------------------------
 	// CustomScript.conf
 	// -------------------------
-	m_strCustomScriptConfFullPath = m_strExeFolderPath;
+	m_strCustomScriptConfFullPath = m_strDataFolderPath;
 	m_strCustomScriptConfFullPath += _T("CustomScriptDefault.conf");
 	//一旦コピーする。
 	if (InVirtualEnvironment() == VE_THINAPP)
@@ -721,7 +733,7 @@ void CSazabi::InitReadConfSetting()
 	// -------------------------
 	// logo.png (and others)
 	// -------------------------
-	CString strLogoFileFullPath = m_strExeFolderPath;
+	CString strLogoFileFullPath = m_strDataFolderPath;
 	strLogoFileFullPath += _T("logoDefault.bmp");
 	m_strLogoFileFullPath = strLogoFileFullPath;
 	//一旦コピーする。
@@ -3871,10 +3883,10 @@ CString CSazabi::GetVOSInfo()
 						szHH = strDateTimeTmp.Mid(4 + 2 + 2 + 1, 2);
 						sz24M = strDateTimeTmp.Mid(4 + 2 + 2 + 1 + 2, 2);
 						szSS = strDateTimeTmp.Mid(4 + 2 + 2 + 1 + 2 + 2, 2);
-						strDateTime.Format(_T("%s-%s-%s %s:%s:%s"), 
-							(LPCTSTR)szYYYY, (LPCTSTR)szMM, 
-							(LPCTSTR)szDD, (LPCTSTR)szHH, 
-							(LPCTSTR)sz24M, (LPCTSTR)szSS);
+						strDateTime.Format(_T("%s-%s-%s %s:%s:%s"),
+								   (LPCTSTR)szYYYY, (LPCTSTR)szMM,
+								   (LPCTSTR)szDD, (LPCTSTR)szHH,
+								   (LPCTSTR)sz24M, (LPCTSTR)szSS);
 					}
 				}
 			}

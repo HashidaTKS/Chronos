@@ -93,6 +93,7 @@ public:
 	CString m_strExeFullPath;
 	CString m_strExeFileName;
 	CString m_strExeFolderPath;
+	CString m_strDataFolderPath;
 	CString m_strLogFileFullPath;
 	CString m_strRecoveryFileFullPath;
 	CString m_strRecoveryFileName;

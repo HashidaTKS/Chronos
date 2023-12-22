@@ -854,7 +854,7 @@ void ClientHandler::OnBeforeDownload(CefRefPtr<CefBrowser> browser,
 						   NULL, strFileName, OFN_NOCHANGEDIR | OFN_HIDEREADONLY | OFN_NONETWORKBUTTON | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST, szFilter, pCWnd);
 		}
 		pFileDlg->m_ofn.lpstrTitle = strTitle.GetString();
-		pFileDlg->m_ofn.lpstrInitialDir = strPath;
+		pFileDlg->m_ofn.lpstrInitialDir = theApp.m_strDataFolderPath;
 
 		WCHAR szSelPath[MAX_PATH + 1] = {0};
 		bRet = pFileDlg->DoModal();

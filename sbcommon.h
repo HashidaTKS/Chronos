@@ -550,6 +550,12 @@ namespace SBUtil
 		CoTaskMemFree(path);
 		return strRet;
 	}
+	static CString GetLocalDataPath()
+	{
+		CString strRet = GetLocalAppDataPath();
+		strRet += "\\ChronosData";
+		return strRet;
+	}
 
 	static CString GetValidFileName(LPCTSTR lpFileName)
 	{
