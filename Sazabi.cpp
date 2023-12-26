@@ -2216,7 +2216,7 @@ BOOL CSazabi::PumpMessage()
 					if (msg.hwnd)
 					{
 						::GetClassName(msg.hwnd, classname, 31);
-						TRACE(_T("PumpMessage[0x%08x] %s (0x%x)\n"), msg.hwnd, classname, msg.message);
+						//TRACE(_T("PumpMessage[0x%08x] %s (0x%x)\n"), msg.hwnd, classname, msg.message);
 						if (_tcscmp(classname, WC_EDIT) == 0 ||
 						    _tcscmp(classname, WC_COMBOBOXEX) == 0 ||
 						    _tcscmp(classname, WC_COMBOBOX) == 0 ||
@@ -2250,6 +2250,20 @@ BOOL CSazabi::PumpMessage()
 					}
 				}
 				CefDoMessageLoopWork();
+			}
+		}
+		while (!::PeekMessage(&msg, NULL, NULL, NULL, PM_NOREMOVE))
+		{
+			if (msg.hwnd)
+			{
+				switch (msg.message)
+				{
+				case WM_MOUSEMOVE:
+					break;
+				default:
+					::GetClassName(msg.hwnd, classname, 31);
+					TRACE(_T("PumpMessage[0x%08x] %s (0x%x)\n"), msg.hwnd, classname, msg.message);
+				}
 			}
 		}
 		return CWinApp::PumpMessage();

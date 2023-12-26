@@ -179,6 +179,19 @@ CBrowserFrame::~CBrowserFrame()
 }
 BOOL CBrowserFrame::PreTranslateMessage(MSG* pMsg)
 {
+	if (pMsg->message == WM_KEYDOWN)
+	{
+		TRACE(_T("PreTranslateMessage[0x%08x] (%d)\n"), pMsg->hwnd, pMsg->message);
+		BOOL isCtrlPressed = (0x8000 & GetKeyState(VK_CONTROL)) != 0;
+		BOOL isShiftPressed = (0x8000 & GetKeyState(VK_SHIFT)) != 0;
+
+		HIMC hContext = ImmGetContext(m_hWnd);
+		BOOL bIMEActive = ((hContext != NULL) && ImmGetOpenStatus(hContext));
+		if (hContext != NULL)
+		{
+			// ImmReleaseContext(m_hWnd, hContext);
+		}
+	}
 	if (theApp.m_bTabEnable_Init)
 	{
 		if (m_cTabWnd)
